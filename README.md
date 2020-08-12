@@ -25,3 +25,7 @@ At the end, I found that it did indeed significantly help stabilize the GAN, but
 ![](images/generator_trained_128x128.png)
 
 However, beyond that, the generator became highly unstable when trying to learn a 256 representation.
+
+### Pro-GAN
+
+In this next experiment, I tried recreating the Pro-GAN architecture described in [this paper](https://arxiv.org/pdf/1710.10196.pdf). However, this attempt did not yield any good results. Mode collapse occured often and very quickly.

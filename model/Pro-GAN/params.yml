@@ -1,3 +1,6 @@
 resolution: 128
+batch_size: 32
+learning_rate: 0.0005
+save_interval: 200
 save_model_path: "../../data/checkpoints"
 log_path: "../../data/images"

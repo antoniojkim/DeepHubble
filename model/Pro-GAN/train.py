@@ -3,11 +3,14 @@ import os
 import time
 
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import torch
 import torchx
+from tqdm import tqdm
 
 from dataset import Dataset
-from networks import Generator, discriminator
+from networks import Generator, Discriminator
 
 
 def generate_noise(generator, minibatch_size=1):
@@ -17,7 +20,7 @@ def generate_noise(generator, minibatch_size=1):
 
 
 def check_generator_dims(generator, res):
-    noise = generator.generate_noise(device=generator.device)
+    noise = generate_noise(generator)
     for alpha in (0, 0.5, 1):
         fake_output = generator.forward(noise, alpha)
 
@@ -27,10 +30,10 @@ def check_generator_dims(generator, res):
         assert fake_output.shape == (1, 3, res, res), err
 
 
-def check_discriminator_dims(disciminator, res):
+def check_discriminator_dims(discriminator, res):
     with torch.autograd.set_detect_anomaly(True):
-        imgs = torch.sigmoid(torch.rand([4, 3, res, res], device=disciminator.device))
-        zeros = torch.zeros(4, device=disciminator.device)
+        imgs = torch.sigmoid(torch.rand([4, 3, res, res], device=discriminator.device))
+        zeros = torch.zeros(4, device=discriminator.device)
         criterion = torch.nn.BCEWithLogitsLoss()
         for alpha in (0, 0.5, 1):
             prediction = discriminator.forward(imgs, alpha)
@@ -89,7 +92,7 @@ def train(args):
     print(f"\nGenerator {resolution}x{resolution}:")
     generator = Generator(resolution=resolution, device=device)
     print("    Number of Parameters: ", generator.num_params())
-    check_generator_dims(generator, res=resolution, device=device)
+    check_generator_dims(generator, res=resolution)
 
     model_file = os.path.join(
         params.save_model_path,
@@ -102,7 +105,7 @@ def train(args):
     print(f"\nDiscriminator {resolution}x{resolution}:")
     discriminator = Discriminator(resolution=resolution, device=device)
     print("    Number of Parameters: ", discriminator.num_params())
-    check_discriminator_dims(discriminator, res=resolution, device=device)
+    check_discriminator_dims(discriminator, res=resolution)
 
     model_file = os.path.join(
         params.save_model_path,
@@ -110,14 +113,14 @@ def train(args):
     )
     if os.path.isfile(model_file):
         discriminator.load(model_file)
-        print("Loaded Discriminator: ", model_file)
+        print("    Loaded Discriminator: ", model_file)
 
     print("\n"+"-"*80+"\n")
 
     generate_fake_images(generator, params, "Untrained")
 
     dataloader = torch.utils.data.DataLoader(
-        Dataset(resolution=resolution, size=101),  # 800000
+        Dataset(resolution=resolution, size=800000),
         batch_size=params.batch_size,
         num_workers=0,
         shuffle=False,
@@ -134,10 +137,10 @@ def train(args):
     D_criterion = torchx.nn.WGANGP_ACGAN(generator, discriminator, use_gp=True)
 
     generator_optimizer = torch.optim.Adam(
-        generator.parameters(), lr=0.001, betas=(0, 0.99)
+        generator.parameters(), lr=params.learning_rate, betas=(0, 0.99)
     )
     discriminator_optimizer = torch.optim.Adam(
-        discriminator.parameters(), lr=0.001, betas=(0, 0.99)
+        discriminator.parameters(), lr=params.learning_rate, betas=(0, 0.99)
     )
 
     def train(fade_in: bool):
@@ -164,7 +167,7 @@ def train(args):
                 discriminator_optimizer.step()
 
                 generator_err = G_criterion(
-                    discriminator.forward(fake_images, alpha), strong_one_label
+                    discriminator.forward(fake_images, alpha), None
                 )
                 generator.zero_grad()
                 generator_err.backward()
@@ -185,7 +188,7 @@ def train(args):
 
                 iteration += 1
 
-                if iteration % 100 == 0:
+                if iteration % params.save_interval == 0:
                     time.sleep(2)
 
                     generator.save(
@@ -201,7 +204,7 @@ def train(args):
                         )
                     )
 
-                    generate_fake_images(generator, f"Pro-GAN Iteration {iteration}")
+                    generate_fake_images(generator, params, f"Pro-GAN Iteration {iteration}")
 
                     pd.DataFrame(
                         {

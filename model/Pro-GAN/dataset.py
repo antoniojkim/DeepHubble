@@ -1,5 +1,6 @@
 import torch
 import torchvision as torchv
+from PIL import Image
 
 
 class Dataset:

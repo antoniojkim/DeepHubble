@@ -152,6 +152,7 @@ class Discriminator(torchx.nn.Module):
         fmap_max: int = 256,
         latent_size: int = None,
         use_wscale: bool = True,
+        device: torch.device = None,
     ):
         super().__init__()
 

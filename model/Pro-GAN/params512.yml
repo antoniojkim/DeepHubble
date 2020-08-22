@@ -1,4 +1,4 @@
-resolution: 128
+resolution: 512
 batch_size: 32
 learning_rate: 0.0005
 save_interval: 200

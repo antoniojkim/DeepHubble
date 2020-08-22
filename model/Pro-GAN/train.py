@@ -81,7 +81,7 @@ def generate_fake_images(generator, params, suffix=""):
 
 
 def train(args):
-    params = torchx.params.Parameters("params.yml")
+    params = torchx.params.Parameters(args.param_file)
 
     resolution = params.resolution
     print(f"Training {resolution}x{resolution} DeepHubble Pro-GAN")
@@ -264,4 +264,5 @@ def train(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("--param-file", default="params.yml")
     train(parser.parse_args())

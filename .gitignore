@@ -2,5 +2,6 @@
 *.tar
 *ipynb_checkpoint*
 *pycache*
+data
 data/
 model/Pro-GAN_scraps.txt

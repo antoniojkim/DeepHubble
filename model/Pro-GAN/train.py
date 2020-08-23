@@ -56,11 +56,11 @@ def FromTensor(tensor):
     return np.moveaxis(tensor.detach().cpu().numpy(), 1, -1)
 
 
-def generate_fake_images(generator, params, suffix=""):
+def generate_fake_images(generator, alpha, params, suffix=""):
     res = params.resolution
 
     noise = generate_noise(generator, 4)
-    fake_output = generator.forward(noise, alpha=0)
+    fake_output = generator.forward(noise, alpha=alpha)
     fake_output = FromTensor(fake_output)
 
     fig, ax = plt.subplots(2, 2, figsize=(10, 11))
@@ -117,7 +117,7 @@ def train(args):
 
     print("\n"+"-"*80+"\n")
 
-    generate_fake_images(generator, params, "Untrained")
+    generate_fake_images(generator, 0, params, "Untrained")
 
     dataloader = torch.utils.data.DataLoader(
         Dataset(resolution=resolution, size=800000),
@@ -180,7 +180,7 @@ def train(args):
                 )
                 progress.update()
 
-                if abs(discriminator_err.item()) > 50:
+                if abs(discriminator_err.item()) > 100:
                     raise Exception("Training has diverged.")
 
                 generator_losses.append(generator_err.item())
@@ -204,7 +204,7 @@ def train(args):
                         )
                     )
 
-                    generate_fake_images(generator, params, f"Pro-GAN Iteration {iteration}")
+                    generate_fake_images(generator, alpha, params, f"Pro-GAN Iteration {iteration}")
 
                     pd.DataFrame(
                         {
@@ -246,7 +246,7 @@ def train(args):
 
     train(fade_in=False)
 
-    generate_fake_images(generator, params, "Trained")
+    generate_fake_images(generator, 1, params, "Trained")
 
     generator.save(
         os.path.join(

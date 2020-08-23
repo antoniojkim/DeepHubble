@@ -28,4 +28,6 @@ However, beyond that, the generator became highly unstable when trying to learn 
 
 ### Pro-GAN
 
-In this next experiment, I tried recreating the Pro-GAN architecture described in [this paper](https://arxiv.org/pdf/1710.10196.pdf). However, this attempt did not yield any good results. Mode collapse occured often and very quickly.
+In this next experiment, I replicated the Pro-GAN architecture described in [this paper](https://arxiv.org/pdf/1710.10196.pdf). With this I was able to generate relatively high quality images resembling the Hubble eXtreme deep field.
+
+![](images/generator_trained_256x256.png)

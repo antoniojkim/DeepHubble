@@ -5,7 +5,6 @@ A PyTorch implementation of Pro-GAN as described in [this paper](https://arxiv.o
 Many of the custom layers used in this implementation can be found in the [TorchX](https://github.com/antoniojkim/TorchX) package.
 
 
-
 ## Training Times
 
 | Resolution | Total Images shown | Minibatch Size | Time Spent Training |
@@ -14,6 +13,11 @@ Many of the custom layers used in this implementation can be found in the [Torch
 | 8x8        | 1,600,000          | 64             | 2216 seconds        |
 | 16x16      | 1,600,000          | 64             | 4505 seconds        |
 | 32x32      | 1,600,000          | 64             | 9442 seconds        |
-| 64x64      | 1,600,000          | 64             | 2:36:01 + 2:23:39   |
+| 64x64      | 1,600,000          | 64             | 17980 seconds       |
+| 128x128    | 1,600,000          | 64             | 28649 seconds       |
+| 256x256    | 1,600,000          | 32             | 93622 seconds       |
 
-<!-- ((2 + 2)*60 + 30 + 30) * 60 + 0 + 0 -->
+
+## Final Generated Image
+
+![](../../images/generator_trained_256x256.png)

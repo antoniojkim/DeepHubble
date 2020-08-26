@@ -1,3 +1,4 @@
+imageio
 git+https://github.com/antoniojkim/TorchX.git
 matplotlib
 numpy

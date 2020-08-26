@@ -16,8 +16,11 @@ Many of the custom layers used in this implementation can be found in the [Torch
 | 64x64      | 1,600,000          | 64             | 17980 seconds       |
 | 128x128    | 1,600,000          | 64             | 28649 seconds       |
 | 256x256    | 1,600,000          | 32             | 93622 seconds       |
+| 512x512    | 1,600,000          | 16             | 144322 seconds      |
+
+![](../../images/TrainingTimes.png)
 
 
 ## Final Generated Image
 
-![](../../images/generator_trained_256x256.png)
+![](../../images/generator_trained_512x512.png)

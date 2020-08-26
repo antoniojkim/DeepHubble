@@ -21,5 +21,3 @@ The main idea behind the Pro-GAN architecture is to progressively grow the size 
 Due to hardware constraints, I modified the architecture described in the paper by scaling it down from having a maximum of 512 channels per convolution operator to a maximum of 256 channels. Despite this scaling down, the results appear to be fairly good.
 
 A number of tricks that are mentioned in the paper were employed including an equalized learning rate, a minibatch standard deviation layer, and pixelwise normalization. All of these tricks helped to stablize the training and reduced the chances of encountering mode collapse significantly.
-
-

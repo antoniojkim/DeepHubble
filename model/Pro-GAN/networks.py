@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import torch
 import torchx
 import numpy as np
@@ -30,8 +31,6 @@ class Generator(torchx.nn.Module):
         self.num_channels = num_channels
         self.resolution = resolution
         self.resolution_log2 = resolution_log2
-
-        self.lod_in = 0
 
         def upsample2d(factor=2):
             assert isinstance(factor, int) and factor >= 1
@@ -164,8 +163,6 @@ class Discriminator(torchx.nn.Module):
 
         def nf(stage):
             return min(int(fmap_base / np.exp2(stage * fmap_decay)), fmap_max)
-
-        lod_in = 0
 
         def downsample2d(factor=2):
             assert isinstance(factor, int) and factor >= 1

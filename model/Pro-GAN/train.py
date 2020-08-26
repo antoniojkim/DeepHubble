@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import argparse
 import os
 import time
@@ -84,6 +85,7 @@ def train(args):
     params = torchx.params.Parameters(args.param_file)
 
     resolution = params.resolution
+    res = resolution
     print(f"Training {resolution}x{resolution} DeepHubble Pro-GAN")
 
     device = torch.device(f"cuda:{params.cuda}" if params.use_gpu else "cpu")
@@ -115,7 +117,7 @@ def train(args):
         discriminator.load(model_file)
         print("    Loaded Discriminator: ", model_file)
 
-    print("\n"+"-"*80+"\n")
+    print("\n" + "-" * 80 + "\n")
 
     generate_fake_images(generator, 0, params, "Untrained")
 
@@ -194,17 +196,19 @@ def train(args):
                     generator.save(
                         os.path.join(
                             params.save_model_path,
-                            f"latest_pro-gan_generator_{resolution}x{resolution}.pt",
+                            f"latest_pro-gan_generator_{res}x{res}.pt",
                         )
                     )
                     discriminator.save(
                         os.path.join(
                             params.save_model_path,
-                            f"latest_pro-gan_discriminator_{resolution}x{resolution}.pt",
+                            f"latest_pro-gan_discriminator_{res}x{res}.pt",
                         )
                     )
 
-                    generate_fake_images(generator, alpha, params, f"Pro-GAN Iteration {iteration}")
+                    generate_fake_images(
+                        generator, alpha, params, f"Pro-GAN Iteration {iteration}"
+                    )
 
                     pd.DataFrame(
                         {
@@ -215,7 +219,7 @@ def train(args):
                     plt.savefig(
                         os.path.join(
                             params.log_path,
-                            f"generator_{resolution}x{resolution}_training_losses_s10.png",
+                            f"generator_{res}x{res}_training_losses_s10.png",
                         )
                     )
                     plt.close()
@@ -229,7 +233,7 @@ def train(args):
                     plt.savefig(
                         os.path.join(
                             params.log_path,
-                            f"generator_{resolution}x{resolution}_training_losses_s100.png",
+                            f"generator_{res}x{res}_training_losses_s100.png",
                         )
                     )
                     plt.close()
@@ -239,7 +243,9 @@ def train(args):
         end = time.time()
 
         with open(os.path.join(params.log_path, "time.log"), "a") as file:
-            file.write(f"Training time {resolution}x{resolution} (fade_in={fade_in}): {end - start}\n")
+            file.write(
+                f"Training time {res}x{res} (fade_in={fade_in}): {end - start}\n"
+            )
 
     if resolution > 4:
         train(fade_in=True)

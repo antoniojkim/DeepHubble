@@ -12,7 +12,8 @@ The data consists of images sampled from the larger Hubble eXtreme Deep Field (X
 
 I was able to replicate the results of the Pro-GAN architecture described in [this paper](https://arxiv.org/pdf/1710.10196.pdf) by Nvidia. With this I was able to generate relatively high quality images resembling the Hubble eXtreme deep field.
 
-![](images/generator_trained_512x512.png)
+![4x4 grid of generated 512x512 images 2](images/generator_trained_512x512_2.png)
+![4x4 grid of generated 512x512 images 1](images/generator_trained_512x512_1.png)
 
 ### Methodology
 
